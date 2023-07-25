@@ -14,9 +14,11 @@ cors = CORS(app)
 @app.route("/sendmail",methods=['POST','GET'])
 @cross_origin()
 def sendVerificationMail():
-    print(request.get_json())
-    TO = 'yashgoswamiyg100@gmail.com'
-    MSG = MIMEText(open("message.html", "r").read().replace('[Your OTP]', '6912').replace('[User]', 'Yash Goswami'),
+    json = request.get_json()
+    print(json['to'])
+    print(json['otp'])
+    TO = json['to']
+    MSG = MIMEText(open("message.html", "r").read().replace('[Your OTP]', str(json['otp'])).replace('[User]', 'Yash Goswami'),
                    "html")
     MSG['From'] = FROM
     MSG['To'] = TO
