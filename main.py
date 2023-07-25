@@ -14,27 +14,24 @@ cors = CORS(app)
 @app.route("/sendmail",methods=['POST','GET'])
 @cross_origin()
 def sendVerificationMail():
-    try:
-        print(request.get_json())
-        TO = 'yashgoswamiyg100@gmail.com'
-        MSG = MIMEText(open("message.html", "r").read().replace('[Your OTP]', '6912').replace('[User]', 'Yash Goswami'),
-                       "html")
-        MSG['From'] = FROM
-        MSG['To'] = TO
-        MSG['Subject'] = "Dr.NearYou App - Verify Your Email"
+    # print(request.get_json())
+    TO = 'yashgoswamiyg100@gmail.com'
+    MSG = MIMEText(open("message.html", "r").read().replace('[Your OTP]', '6912').replace('[User]', 'Yash Goswami'),
+                   "html")
+    MSG['From'] = FROM
+    MSG['To'] = TO
+    MSG['Subject'] = "Dr.NearYou App - Verify Your Email"
 
-        smtp = smtplib.SMTP(HOST, PORT)
-        smtp.connect(HOST, PORT)
-        smtp.ehlo()
-        smtp.starttls()
-        smtp.ehlo()
-        status, res = smtp.login(FROM, PASS)
+    smtp = smtplib.SMTP(HOST, PORT)
+    smtp.connect(HOST, PORT)
+    smtp.ehlo()
+    smtp.starttls()
+    smtp.ehlo()
+    status, res = smtp.login(FROM, PASS)
 
-        smtp.sendmail(FROM, TO, MSG.as_string())
-        smtp.quit()
-        return "Success"
-    except:
-        return "Error"
+    smtp.sendmail(FROM, TO, MSG.as_string())
+    smtp.quit()
+    return "Success"
 
 
 if __name__=="__main__":
