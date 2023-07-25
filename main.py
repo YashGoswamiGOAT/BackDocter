@@ -15,11 +15,11 @@ cors = CORS(app)
 @cross_origin()
 def sendVerificationMail():
     json = request.get_json()
-    print(json['to'])
-    print(json['otp'])
+    # print(json['to'])
+    # print(json['otp'])
+    # print(json['name'])
     TO = json['to']
-    MSG = MIMEText(open("message.html", "r").read().replace('[Your OTP]', str(json['otp'])).replace('[User]', 'Yash Goswami'),
-                   "html")
+    MSG = MIMEText(open("message.html", "r").read().replace('[Your OTP]', str(json['otp'])).replace('[User]', json['name']),"html")
     MSG['From'] = FROM
     MSG['To'] = TO
     MSG['Subject'] = "Dr.NearYou App - Verify Your Email"
