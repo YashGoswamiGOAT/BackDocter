@@ -25,6 +25,8 @@ for hospital in csv:
     for spec in hospital[3].split(","):
         while (spec.__contains__("  ")):
             spec = spec.replace("  "," ")
+        spec = spec.split("(")[0]
         specs.set(spec,1)
 
-print(open("specility.txt","w").write(str(specs.keys())))
+# print(open("specility.txt","w").write(str(specs.keys())))
+print(len(specs.keys()))
