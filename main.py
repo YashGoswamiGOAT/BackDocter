@@ -2,7 +2,16 @@ import smtplib
 from email.mime.text import MIMEText
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
+import firebase_admin
+from firebase_admin import credentials, db
+import json
 
+cred = credentials.Certificate("drnearme.json")
+firebase_admin.initialize_app(cred,{
+    'databaseURL' : "https://drnearme-21c37-default-rtdb.firebaseio.com"
+})
+
+reff = db.reference("/")
 
 HOST = "smtp.gmail.com"
 PORT = 587
@@ -11,7 +20,7 @@ PASS = "ukszmmfvnaxjjomb"
 
 app = Flask(__name__)
 cors = CORS(app)
-@app.route("/sendmail",methods=['POST','GET'])
+@app.route("/sendmail",methods=['POST'])
 @cross_origin()
 def sendVerificationMail():
     json = request.get_json()
@@ -35,6 +44,40 @@ def sendVerificationMail():
     smtp.quit()
     return "Success"
 
+def PassGen(name,password):
+    return int(''.join(str(ord(c)) for c in name))+int(''.join(str(ord(c)) for c in password))
+
+@app.route("/signup",methods=['POST'])
+@cross_origin()
+def Signin():
+    data = request.get_json()
+    email = str(data['email']).replace(".","")
+    name = data['username']
+    password = data['password']
+    reff.child('Accounts').child(email).set({
+        'username' : name,
+        'password' : str(PassGen(name,password))
+    })
+    return "Success"
+@app.route("/auth",methods=['POST'])
+@cross_origin()
+def Auth():
+    data = request.get_json()
+    email = str(data['email']).replace(".","")
+    password = data['password']
+    AccountDetails = reff.child('Accounts').child(email).get()
+    passNo = str(PassGen(AccountDetails['username'],password))
+    print((passNo,AccountDetails['password']))
+    if passNo==str(AccountDetails['password']):
+        return json.dumps({
+            'name' : AccountDetails['username'],
+            'email' : data['email']
+        })
+    else:
+        return str({
+            'status' : False
+        })
+    return "Success"
 
 if __name__=="__main__":
     app.run(debug=True)
