@@ -94,7 +94,7 @@ def Auth():
 @app.route("/news/<page>")
 @cross_origin()
 def Feed(page):
-    news = newsapi.get_everything(q="World Health Organisation", page=page, page_size=20)
+    news = newsapi.get_everything(q="World Health Organisation", page=int(page), page_size=20)
     return  sorted(news['articles'], key=lambda x: random.random())
 
 if __name__=="__main__":
