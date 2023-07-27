@@ -1,10 +1,15 @@
 import smtplib
 from email.mime.text import MIMEText
+from random import random
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 import firebase_admin
 from firebase_admin import credentials, db
 import json
+from newsapi import NewsApiClient
+
+newsapi = NewsApiClient(api_key="aa9b869592d846948528369252d4cd54")
+
 
 cred = credentials.Certificate("drnearme.json")
 firebase_admin.initialize_app(cred,{
@@ -85,6 +90,12 @@ def Auth():
             'status' : False
         })
     return "Success"
+
+@app.route("/news/<page>")
+@cross_origin()
+def Feed(page):
+    news = newsapi.get_everything(q="World Health Organisation", page=page, page_size=20)
+    return  sorted(news['articles'], key=lambda x: random.random())
 
 if __name__=="__main__":
     app.run(debug=True)
