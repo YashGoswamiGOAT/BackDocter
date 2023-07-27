@@ -54,7 +54,7 @@ def Signin():
     email = str(data['email']).replace(".","").lower()
     name = data['username']
     password = data['password']
-    if reff.child('Accounts').child(email)!=None:
+    if reff.child('Accounts').child(email).get()!=None:
         return "Email Exist"
     reff.child('Accounts').child(email).set({
         'username' : name,

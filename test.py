@@ -9,4 +9,4 @@ firebase_admin.initialize_app(cred,{
 
 reff = db.reference("/")
 
-print(reff.child('Accounts').get())
+print(reff.child('Accounts').child('yashgoswamiyg100@gmailcom').get())
