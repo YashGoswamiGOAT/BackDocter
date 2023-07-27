@@ -51,9 +51,11 @@ def PassGen(name,password):
 @cross_origin()
 def Signin():
     data = request.get_json()
-    email = str(data['email']).replace(".","")
+    email = str(data['email']).replace(".","").lower()
     name = data['username']
     password = data['password']
+    if reff.child('Accounts').child(email)!=None:
+        return "Email Exist"
     reff.child('Accounts').child(email).set({
         'username' : name,
         'password' : str(PassGen(name,password))
