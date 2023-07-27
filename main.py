@@ -7,6 +7,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 import json
 from newsapi import NewsApiClient
+import random
 
 newsapi = NewsApiClient(api_key="aa9b869592d846948528369252d4cd54")
 
