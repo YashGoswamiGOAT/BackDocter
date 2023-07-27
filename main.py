@@ -27,12 +27,15 @@ def sendVerificationMail():
     # print(json['to'])
     # print(json['otp'])
     # print(json['name'])
+
     TO = json['to']
     MSG = MIMEText(open("message.html", "r").read().replace('[Your OTP]', str(json['otp'])).replace('[User]', json['name']),"html")
     MSG['From'] = FROM
     MSG['To'] = TO
     MSG['Subject'] = "Dr.NearYou App - Verify Your Email"
-
+    if reff.child('Accounts').child(str(TO).replace(".","").lower()).get()!=None:
+        print("Exist")
+        return "Email Exist"
     smtp = smtplib.SMTP(HOST, PORT)
     smtp.connect(HOST, PORT)
     smtp.ehlo()
@@ -55,12 +58,14 @@ def Signin():
     name = data['username']
     password = data['password']
     if reff.child('Accounts').child(email).get()!=None:
+        print("Exist")
         return "Email Exist"
-    reff.child('Accounts').child(email).set({
-        'username' : name,
-        'password' : str(PassGen(name,password))
-    })
-    return "Success"
+    else:
+        reff.child('Accounts').child(email).set({
+            'username': name,
+            'password': str(PassGen(name, password))
+        })
+        return "Success"
 @app.route("/auth",methods=['POST'])
 @cross_origin()
 def Auth():
