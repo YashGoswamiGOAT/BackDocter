@@ -8,7 +8,6 @@ from firebase_admin import credentials, db
 import json
 from newsapi import NewsApiClient
 import random
-import pandas as pd
 
 newsapi = NewsApiClient(api_key="aa9b869592d846948528369252d4cd54")
 dataframe = pd.read_csv('data.csv')
